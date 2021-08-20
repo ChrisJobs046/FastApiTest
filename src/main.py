@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException,status
 from pydantic import BaseModel
 
 db = []
@@ -14,14 +14,18 @@ app = FastAPI()
 def Index():
     return { 'key': 'value' }
 
-app.get("/cities")
+@app.get("/cities")
 def get_city():
     return db
 
 
-#@app.get("/cities/{city_id}")
+@app.get("/cities/{city_id}",status_code=status.HTTP_404_NOT_FOUND)
+def get_city(city_id: int):
+    if not city_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="City not found")
+    return db[city_id - 1]
 
-@app.pos("/cities")
+@app.post("/cities")
 def create_city(city: City):
     db.append(city.dict())
     return db[-1]
