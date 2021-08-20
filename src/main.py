@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException,status
 from pydantic import BaseModel
 
+import requests
+
 db = []
 
 class City(BaseModel):
@@ -15,7 +17,7 @@ def Index():
     return { 'key': 'value' }
 
 @app.get("/cities")
-def get_city():
+def get_cities():
     return db
 
 
